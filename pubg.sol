@@ -10,7 +10,7 @@ contract PUBGToken is ERC20("PUBGToken", "PUBG"), Ownable {
     mapping(address => uint256) public killCount;
     mapping(address => bool) public rewardsRedeemed;
 
-    constructor() {
+    constructor() Ownable(msg.sender) { // Pass msg.sender to Ownable constructor
         _mint(msg.sender, healthKits);
     }
 
