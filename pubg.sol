@@ -4,36 +4,37 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract pubg is Ownable {
-    ERC20 public token;
-
+contract PUBGToken is ERC20, Ownable {
     mapping(address => uint256) public killCount;
-    mapping(address => bool) public rewardsRedeemed;
 
-    event PlayerKilled(address indexed player, uint256 enemies);
-    event RewardsIssued(address indexed player, uint256 rewards);
-    event RewardsRedeemed(address indexed player);
-
-    constructor(address _tokenAddress) {
-        token = ERC20(_tokenAddress);
+    constructor() ERC20("PUBGToken", "PUBG") {
+        _mint(msg.sender, 1000000 * 10 ** uint(decimals()));
     }
 
-    function shootEnemies(uint256 enemies) public {
-        require(enemies > 0, "Number of enemies shot must be greater than 0");
-        token.transferFrom(msg.sender, address(this), enemies);
-        killCount[msg.sender] += enemies;
-        emit PlayerKilled(msg.sender, enemies);
+    function mint(address account, uint256 amount) public onlyOwner {
+        _mint(account, amount);
     }
 
-    function issueRewards(address player, uint256 rewards) public onlyOwner {
-        rewardsRedeemed[player] = false;
-        token.transfer(player, rewards);
-        emit RewardsIssued(player, rewards);
+    function burn(uint256 amount) public onlyOwner {
+        _burn(msg.sender, amount);
     }
 
-    function redeemRewards() public {
-        require(!rewardsRedeemed[msg.sender], "Rewards already redeemed");
-        rewardsRedeemed[msg.sender] = true;
-        emit RewardsRedeemed(msg.sender);
+    function shootEnemies() public {
+        killCount[msg.sender]++;
+    }
+
+    function redeemTokens(uint256 amount) public {
+        require(killCount[msg.sender] >= 1, "Must have at least one kill to redeem");
+        require(balanceOf(msg.sender) >= amount, "Insufficient balance");
+        _burn(msg.sender, amount);
+    }
+
+    function checkBalance(address account) public view returns (uint256) {
+        return balanceOf(account);
+    }
+
+    function transferTokens(address recipient, uint256 amount) public {
+        require(balanceOf(msg.sender) >= amount, "Insufficient balance");
+        _transfer(msg.sender, recipient, amount);
     }
 }
