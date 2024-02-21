@@ -1,42 +1,65 @@
-# PUBGToken
+# PUBG Contract
 
-PUBGToken is a Solidity smart contract that implements an ERC20 token with functionalities inspired by the popular battle royale game PlayerUnknown's Battlegrounds (PUBG). The token represents in-game assets, such as health kits and rewards, and allows players to interact with the game mechanics on the Ethereum blockchain.
+The PUBG contract is a simple game contract built on the Ethereum blockchain where players can shoot enemies, earn rewards, and redeem them using a specified ERC20 token.
 
 ## Features
 
-### ERC20 Compliance
-
-PUBGToken adheres to the ERC20 token standard, allowing it to be compatible with various Ethereum wallets, exchanges, and decentralized applications (dApps).
-
-### Health Kits
-
-Players can collect health kits using the `collectHealthKits` function, which increases their supply of health kits for in-game use.
-
-### Shooting Enemies
-
-The `shootEnemies` function enables players to engage in battles by shooting enemies. Players must have an adequate supply of health kits to participate in combat.
-
-### Rewards
-
-Players can receive rewards for their achievements in the game. The contract owner can issue rewards to players using the `issueRewards` function, and players can redeem their rewards with the `redeemRewards` function.
+- Players can shoot enemies and earn rewards.
+- Rewards can be issued by the contract owner.
+- Players can redeem their rewards for in-game items.
 
 ## Getting Started
 
-To interact with the PUBGToken contract, you can deploy it to the Ethereum blockchain using tools like Remix or Truffle. Once deployed, players can utilize the contract's functions through Ethereum wallets or custom-built applications.
+To interact with the PUBG contract, you need an Ethereum wallet and some Ether (ETH) to cover transaction fees.
+
+### Prerequisites
+
+- An Ethereum wallet (e.g., MetaMask).
+- Some Ether (ETH) to cover transaction fees.
+
+### Installation
+
+No installation is required for interacting with the contract. You can interact with it directly using tools like Remix, Hardhat, or Truffle.
+
+### Contract Deployment
+
+1. Deploy the ERC20 token contract that will be used as in-game currency.
+2. Deploy the PUBG contract, passing the address of the deployed ERC20 token contract.
 
 ## Usage
 
-### Deploying the Contract
+### Shooting Enemies
 
-Deploy the PUBGToken contract to the Ethereum blockchain with an initial supply of health kits and rewards.
+Players can shoot enemies by calling the `shootEnemies` function, specifying the number of enemies they want to shoot.
 
-### Interacting with the Contract
+### Issuing Rewards
 
-- **Collecting Health Kits**: Call the `collectHealthKits` function to increase your supply of health kits.
-- **Shooting Enemies**: Engage in battles by calling the `shootEnemies` function and specifying the number of enemies shot.
-- **Issuing Rewards**: As the contract owner, use the `issueRewards` function to distribute rewards to players.
-- **Redeeming Rewards**: Players can redeem their rewards by calling the `redeemRewards` function.
+The contract owner can issue rewards to players using the `issueRewards` function, specifying the player's address and the amount of rewards.
+
+### Redeeming Rewards
+
+Players can redeem their rewards for in-game items by calling the `redeemRewards` function.
+
+## Example Usage
+
+```solidity
+// Deploy PUBG contract, passing the address of the deployed ERC20 token contract
+PUBG game = new PUBG(tokenAddress);
+
+// Player shoots enemies
+game.shootEnemies(10);
+
+// Owner issues rewards to a player
+game.issueRewards(playerAddress, 100);
+
+// Player redeems rewards
+game.redeemRewards();
+```
+
+## Contributing
+
+Contributions are welcome! If you have suggestions, bug reports, or feature requests, please open an issue or submit a pull request.
 
 ## License
 
-PUBGToken is licensed under the MIT License. See the `LICENSE` file for more information.
+This project is licensed under the [MIT License](LICENSE).
