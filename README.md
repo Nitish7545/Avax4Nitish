@@ -1,65 +1,55 @@
-# PUBG Contract
+# PUBGToken ERC20 Token
 
-The PUBG contract is a simple game contract built on the Ethereum blockchain where players can shoot enemies, earn rewards, and redeem them using a specified ERC20 token.
+PUBGToken is an ERC20 token contract designed for a PUBG-themed gaming environment. Players can earn tokens by shooting enemies, redeem their tokens for rewards, check their token balances, transfer tokens to others, mint new tokens, and burn tokens.
 
-## Features
+## Functionality
 
-- Players can shoot enemies and earn rewards.
-- Rewards can be issued by the contract owner.
-- Players can redeem their rewards for in-game items.
+The PUBGToken contract includes the following functionality:
 
-## Getting Started
+### 1. Mint Tokens
 
-To interact with the PUBG contract, you need an Ethereum wallet and some Ether (ETH) to cover transaction fees.
+- **Function**: `mint(address account, uint256 amount)`
+- **Description**: Allows the owner to mint new tokens and distribute them to specified accounts.
+- **Access**: Only the contract owner can call this function.
 
-### Prerequisites
+### 2. Burn Tokens
 
-- An Ethereum wallet (e.g., MetaMask).
-- Some Ether (ETH) to cover transaction fees.
+- **Function**: `burn(uint256 amount)`
+- **Description**: Enables the owner to burn tokens from their own balance.
+- **Access**: Only the contract owner can call this function.
 
-### Installation
+### 3. Shoot Enemies
 
-No installation is required for interacting with the contract. You can interact with it directly using tools like Remix, Hardhat, or Truffle.
+- **Function**: `shootEnemies()`
+- **Description**: Allows players to increase their kill count by shooting enemies.
+- **Access**: Any player can call this function.
 
-### Contract Deployment
+### 4. Redeem Tokens
 
-1. Deploy the ERC20 token contract that will be used as in-game currency.
-2. Deploy the PUBG contract, passing the address of the deployed ERC20 token contract.
+- **Function**: `redeemTokens(uint256 amount)`
+- **Description**: Enables players to redeem their tokens for rewards.
+- **Access**: Players must have at least one kill to be eligible for redemption. The contract checks the player's balance and burns the specified amount of tokens.
 
-## Usage
+### 5. Check Balance
 
-### Shooting Enemies
+- **Function**: `checkBalance(address account) returns (uint256)`
+- **Description**: Allows players to check their token balances.
+- **Access**: Any player can call this function.
 
-Players can shoot enemies by calling the `shootEnemies` function, specifying the number of enemies they want to shoot.
+### 6. Transfer Tokens
 
-### Issuing Rewards
+- **Function**: `transferTokens(address recipient, uint256 amount)`
+- **Description**: Enables players to transfer tokens to others.
+- **Access**: Players must have sufficient balance. Any player can call this function.
 
-The contract owner can issue rewards to players using the `issueRewards` function, specifying the player's address and the amount of rewards.
+## Events
 
-### Redeeming Rewards
+The PUBGToken contract does not emit any events.
 
-Players can redeem their rewards for in-game items by calling the `redeemRewards` function.
+## Deployment
 
-## Example Usage
-
-```solidity
-// Deploy PUBG contract, passing the address of the deployed ERC20 token contract
-PUBG game = new PUBG(tokenAddress);
-
-// Player shoots enemies
-game.shootEnemies(10);
-
-// Owner issues rewards to a player
-game.issueRewards(playerAddress, 100);
-
-// Player redeems rewards
-game.redeemRewards();
-```
-
-## Contributing
-
-Contributions are welcome! If you have suggestions, bug reports, or feature requests, please open an issue or submit a pull request.
+The contract is deployed with the name "PUBGToken" and the symbol "PUBG". It is initialized with an initial supply of 1,000,000 tokens.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This contract is licensed under the MIT License.
