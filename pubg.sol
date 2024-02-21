@@ -2,38 +2,38 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract PUBGToken is ERC20("PUBGToken", "PUBG"), Ownable {
-    uint256 public healthKits = 10;
+contract DegenGaming is Ownable {
+    ERC20 public token;
+
     mapping(address => uint256) public killCount;
     mapping(address => bool) public rewardsRedeemed;
 
-    constructor() Ownable(msg.sender) { // Pass msg.sender to Ownable constructor
-        _mint(msg.sender, healthKits);
-    }
+    event PlayerKilled(address indexed player, uint256 enemies);
+    event RewardsIssued(address indexed player, uint256 rewards);
+    event RewardsRedeemed(address indexed player);
 
-    function collectHealthKits(uint256 kits) public {
-        _mint(msg.sender, kits);
-        healthKits += kits;
+    constructor(address _tokenAddress) {
+        token = ERC20(_tokenAddress);
     }
 
     function shootEnemies(uint256 enemies) public {
-        require(healthKits > 0, "Not enough health kits");
         require(enemies > 0, "Number of enemies shot must be greater than 0");
-
-        healthKits -= enemies;
+        token.transferFrom(msg.sender, address(this), enemies);
         killCount[msg.sender] += enemies;
+        emit PlayerKilled(msg.sender, enemies);
     }
 
-    function issueRewards(address addr, uint256 rewards) public onlyOwner {
-        rewardsRedeemed[addr] = false;
-        _mint(addr, rewards);
+    function issueRewards(address player, uint256 rewards) public onlyOwner {
+        rewardsRedeemed[player] = false;
+        token.transfer(player, rewards);
+        emit RewardsIssued(player, rewards);
     }
 
     function redeemRewards() public {
         require(!rewardsRedeemed[msg.sender], "Rewards already redeemed");
         rewardsRedeemed[msg.sender] = true;
+        emit RewardsRedeemed(msg.sender);
     }
 }
